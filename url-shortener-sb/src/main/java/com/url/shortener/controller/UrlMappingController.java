@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.beans.factory.annotation.Value;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,13 +19,28 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/urls")
-@AllArgsConstructor
 public class UrlMappingController {
-    private UrlMappingService urlMappingService;
-    private UserService userService;
+    private final UrlMappingService urlMappingService;
+    private final UserService userService;
+    private final String publicUsername;
 
-    // {"originalUrl":"https://example.com"}
-//    https://abc.com/QN7XOa0a --> https://example.com
+    public UrlMappingController(
+            UrlMappingService urlMappingService,
+            UserService userService,
+            @Value("${PUBLIC_USERNAME}") String publicUsername) {
+
+        this.urlMappingService = urlMappingService;
+        this.userService = userService;
+        this.publicUsername = publicUsername;
+    }
+
+    @PostMapping("/publicpathforshorturl")
+    public ResponseEntity<UrlMappingDTO> createPublicShortUrl(@RequestBody Map<String, String> request){
+        String originalUrl = request.get("originalUrl");
+        User user = userService.findByUsername(publicUsername);
+        UrlMappingDTO urlMappingDTO = urlMappingService.createShortUrl(originalUrl, user);
+        return ResponseEntity.ok(urlMappingDTO);
+    }
 
     @PostMapping("/shorten")
     @PreAuthorize("hasRole('USER')")
