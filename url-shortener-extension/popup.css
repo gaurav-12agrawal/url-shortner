@@ -1,0 +1,13 @@
+body {
+width: 250px;
+height: 120px;
+font-family: Arial, sans-serif;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+#status {
+text-align: center;
+font-size: 14px;
+}

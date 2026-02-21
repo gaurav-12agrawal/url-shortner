@@ -10,11 +10,16 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Value("${frontend.url}")
     String frontEndUrl;
-
+    @Value("${chrome.extension.id}")
+    String chromeExtensionId;
     @Override
     public void addCorsMappings(CorsRegistry registry) {
+        String extensionOrigin = "chrome-extension://" + chromeExtensionId;
         registry.addMapping("/**")
-                .allowedOrigins(frontEndUrl)
+                .allowedOrigins(
+                        frontEndUrl,
+                        extensionOrigin
+                )
                 .allowedMethods("GET","POST","PUT","DELETE","OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
