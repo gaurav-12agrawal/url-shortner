@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const originalUrl = tab.url;
 
     // Call backend
-    const response = await fetch("https://zipnow.onrender.com/api/urls/publicpathforshorturl", {
+    const response = await fetch("https://zipit-v2.onrender.com/api/urls/publicpathforshorturl", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

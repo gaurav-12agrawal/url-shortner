@@ -23,16 +23,23 @@ public class UrlMappingService {
 
     private UrlMappingRepository urlMappingRepository;
     private ClickEventRepository clickEventRepository;
+    private UrlCreationService urlCreationService;
+    private static final long URL_OFFSET = 10_000_000L;
 
     public UrlMappingDTO createShortUrl(String originalUrl, User user) {
-        String shortUrl = generateShortUrl();
         UrlMapping urlMapping = new UrlMapping();
         urlMapping.setOriginalUrl(originalUrl);
-        urlMapping.setShortUrl(shortUrl);
         urlMapping.setUser(user);
         urlMapping.setCreatedDate(LocalDateTime.now());
-        UrlMapping savedUrlMapping = urlMappingRepository.save(urlMapping);
-        return convertToDto(savedUrlMapping);
+        // Step 1: Save to generate ID
+        UrlMapping saved = urlMappingRepository.save(urlMapping);
+        // Step 2: Encode ID to Base62
+        long encodedValue = URL_OFFSET + saved.getId();
+        String shortUrl = urlCreationService.encodeBase62(encodedValue);
+        saved.setShortUrl(shortUrl);
+        // Step 3: Save again with shortUrl
+        saved = urlMappingRepository.save(saved);
+        return convertToDto(saved);
     }
 
     private UrlMappingDTO convertToDto(UrlMapping urlMapping){

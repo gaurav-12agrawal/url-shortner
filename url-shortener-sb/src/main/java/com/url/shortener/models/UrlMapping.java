@@ -12,6 +12,7 @@ public class UrlMapping {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(length = 2048)
     private String originalUrl;
     private String shortUrl;
     private int clickCount = 0;

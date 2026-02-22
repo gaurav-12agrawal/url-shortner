@@ -4,7 +4,7 @@
 "version": "1.0",
 "description": "Shortens current URL and copies it",
 "permissions": ["activeTab", "scripting", "clipboardWrite"],
-"host_permissions": ["https://zipnow.onrender.com/*"],
+"host_permissions": ["https://zipit-v2.onrender.com/*"],
 "icons": {
 "16": "icon.png",
 "48": "icon.png",
